@@ -1,11 +1,10 @@
 import logging
-from pathlib import Path
 from typing import Tuple, List
 
 import requests
 from bs4 import BeautifulSoup
 
-from podcast_download.common import audio_download
+from online_resource.podcast.common import audio_download
 
 
 def parse_audio_link(fmid: str) -> Tuple[str, List[str]]:
