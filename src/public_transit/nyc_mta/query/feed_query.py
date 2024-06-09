@@ -6,7 +6,7 @@ import requests
 from google.transit import gtfs_realtime_pb2
 from protobuf_to_dict import protobuf_to_dict
 
-from nyc_mta.query.util import get_ny_time
+from public_transit.nyc_mta.query.util import get_ny_time
 
 
 class RouteGroup(Enum):

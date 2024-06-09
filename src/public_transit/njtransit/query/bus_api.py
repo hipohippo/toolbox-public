@@ -7,7 +7,7 @@ from typing import List
 from bs4 import BeautifulSoup
 from nodriver.core.browser import Browser
 
-from njtransit.query.bus_and_stop import NJTBusStop, NextBus, format_bus_message
+from public_transit.njtransit.query.bus_and_stop import NJTBusStop, NextBus, format_bus_message
 
 
 async def extract_content_from_page(stop: NJTBusStop, browser: Browser) -> BeautifulSoup:
