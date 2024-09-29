@@ -73,32 +73,3 @@ def replace_line_breaks_except_pre(html_string, replace_by=' '):
         else:
             out += line_breaks_and_empty_strings.sub(replace_by, part)
     return out
-
-def google_parse(config: dict, keyword: str) -> str:
-    driver: WebDriver = config["webdriver"]
-    driver.switch_to.window(driver.window_handles[1])
-    driver.get(f"https://google.com/search?q={keyword}")
-    driver.implicitly_wait(5)
-
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    for data in soup(["style", "script"]):
-        # Remove tags
-        data.decompose()
-
-    for tag in soup.find_all("span"):
-        tag.unwrap()
-
-    results = soup.find_all(class_="g")
-    return "\n".join([f"{result.text}" for result in results[:3]])
-
-
-
-async def google_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, keyword: str):
-    try:
-        logging.info(f"received request to google {keyword}")
-        result = google_parse(context.bot_data, keyword)
-        logging.info(result[:300])
-        await update.message.reply_html(result)
-    except Exception as error:
-        logging.error(error)
-        await context.bot.send_message(context.bot_data["debug_log_group"], text=error)
