@@ -21,7 +21,7 @@ def audio_download(title: str, episode_id: str, audio_links: List[str], dest_fol
         file_ext = audio_link.split(".")[-1].split("?")[0]
         title = re.sub(EMOJI_PATTERN, r"", title)
         title = re.sub(r"[#/&;:'<>\|\"\?\.\*\^\\]", "", title)
-        fn = dest_folder / f"{title}_{episode_id}_{idx}.{file_ext}"
+        fn = (dest_folder / f"{title}_{episode_id}_{idx}.{file_ext}").expanduser()
         request_download(audio_link, fn)
         fns.append(fn)
     return fns
