@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from mastodon import Mastodon
 import logging
 import os
 from typing import List
@@ -12,10 +11,7 @@ async def post_to_mastodon(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     This function extracts text and images from the Telegram update and posts them to Mastodon.
     """
     # Initialize Mastodon client
-    mastodon = Mastodon(
-        api_key=context.bot_data["mastodon_api_key"],
-        instance_url=context.bot_data["mastodon_instance_url"],
-    )
+    mastodon = context.bot_data["mastodon_object"]
 
     # Extract text from the message
     text = update.message.text or update.message.caption or ""
@@ -23,14 +19,14 @@ async def post_to_mastodon(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     # Extract images from the message
     photos: List[str] = []
     if update.message.photo:
-        # Get the largest photo (last in the list)
-        photo = update.message.photo[-1]
-        file = await context.bot.get_file(photo.file_id)
+        for photo in update.message.photo:
+            file = await context.bot.get_file(photo.file_id)
 
-        # Download the photo
-        photo_path = f"temp_{photo.file_id}.jpg"
-        await file.download_to_drive(photo_path)
-        photos.append(photo_path)
+            # Download the photo
+            photo_path = f"temp_{photo.file_id}.jpg"
+            await file.download_to_drive(photo_path)
+            photos.append(photo_path)
+
 
     try:
         if photos:
@@ -42,6 +38,7 @@ async def post_to_mastodon(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
         logging.info(f"Successfully posted to Mastodon: {response}")
         await update.message.reply_text("Successfully posted to Mastodon!")
+
     except Exception as e:
         logging.error(f"Error posting to Mastodon: {str(e)}")
         await update.message.reply_text(

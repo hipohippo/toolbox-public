@@ -39,17 +39,24 @@ class NeoDB:
             "accept": "application/json",
         }
 
-    def mark_complete(self, item_uuid: str, fields: dict) -> tuple[int, dict]:
+    def mark_complete(self, item_uuid: str, comment_text: str) -> tuple[int, dict]:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
+        fields = {
+            FieldName.SHELF_TYPE.value: ShelfType.COMPLETE.value,
+            FieldName.VISIBILITY.value: Visibility.SELF.value, 
+            FieldName.COMMENT_TEXT.value: comment_text,
+            FieldName.TAGS.value: [],
+            FieldName.SHARE_TO_MASTODON.value: False,
+        }
         response = requests.post(endpoint, headers=self.headers, json=fields)
         return response.status_code, response.json()
 
-    def mark_wish(self, item_uuid: str) -> tuple[int, dict]:
+    def mark_wish(self, item_uuid: str, comment_text: str) -> tuple[int, dict]:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
         fields = {
             FieldName.SHELF_TYPE.value: ShelfType.WISHLIST.value,
             FieldName.VISIBILITY.value: Visibility.SELF.value, 
-            FieldName.COMMENT_TEXT.value: "",
+            FieldName.COMMENT_TEXT.value: comment_text,
             FieldName.TAGS.value: [],
             FieldName.SHARE_TO_MASTODON.value: False,
         }
