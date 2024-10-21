@@ -1,6 +1,8 @@
 import requests
 from enum import Enum
 
+from neodb.item import NeoDBItem
+
 
 class ShelfType(Enum):
     WISHLIST = "wishlist"
@@ -43,7 +45,7 @@ class NeoDB:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
         fields = {
             FieldName.SHELF_TYPE.value: ShelfType.COMPLETE.value,
-            FieldName.VISIBILITY.value: Visibility.SELF.value, 
+            FieldName.VISIBILITY.value: Visibility.SELF.value,
             FieldName.COMMENT_TEXT.value: comment_text,
             FieldName.TAGS.value: [],
             FieldName.SHARE_TO_MASTODON.value: False,
@@ -55,7 +57,7 @@ class NeoDB:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
         fields = {
             FieldName.SHELF_TYPE.value: ShelfType.WISHLIST.value,
-            FieldName.VISIBILITY.value: Visibility.SELF.value, 
+            FieldName.VISIBILITY.value: Visibility.SELF.value,
             FieldName.COMMENT_TEXT.value: comment_text,
             FieldName.TAGS.value: [],
             FieldName.SHARE_TO_MASTODON.value: False,
@@ -75,4 +77,9 @@ class NeoDB:
             "page": page_number,
         }
         response = requests.get(endpoint, headers=self.headers, params=params)
-        return response.status_code, response.json()
+        if response.status_code == 200:
+            results = response.json().get("data", [])
+            items = [NeoDBItem(item) for item in results]
+            return response.status_code, items
+        else:
+            return response.status_code, []
