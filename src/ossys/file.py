@@ -1,4 +1,5 @@
 import glob
 
-def search(keyword:str):
-    return glob.glob(fr"f:\books\*\*{keyword}*.epub", recursive=True)
+
+def search(keyword: str):
+    return glob.glob(rf"f:\books\*\*{keyword}*.epub", recursive=True)

@@ -37,5 +37,5 @@ if __name__ == "__main__":
     fmid = "66da5946bfd7110df49820a2"
     destination_folder = f"~/downloads"
     title, audio_links = parse_audio_link(fmid)
-    title = title.replace("？","").replace("?","").replace("：","").replace(":", "")
+    title = title.replace("？", "").replace("?", "").replace("：", "").replace(":", "")
     fns = audio_download(title, fmid, audio_links, Path(destination_folder))

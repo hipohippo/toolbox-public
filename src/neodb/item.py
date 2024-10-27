@@ -23,9 +23,7 @@ class NeoDBItem:
         self.parent_uuid: str = raw_data.get("parent_uuid", "")
         self.external_resources: list[dict] = raw_data.get("external_resources", [])
         self.type = raw_data.get("type", "")  # TVSeason, Edition, Album
-        self.category: str = raw_data.get(
-            "category", ""
-        )  # tv, book, movie, music, podcast
+        self.category: str = raw_data.get("category", "")  # tv, book, movie, music, podcast
         self.title: str = raw_data.get("title", "")
         self.display_title: str = raw_data.get("display_title", "")
         self.description: str = raw_data.get("description", "")
@@ -37,6 +35,7 @@ class NeoDBItem:
         self.author: str = "_".join(raw_data.get("author", []))
         self.artist: str = "_".join(raw_data.get("artist", []))
         self.host: str = "_".join(raw_data.get("host", []))
+        self.isbn: str = raw_data.get("isbn", "")
 
         actor_list = raw_data.get("actor", [])[:10]
         if actor_list:
@@ -77,7 +76,8 @@ class NeoDBItem:
             f"Director: {self.director}\n"
             f"Author: {self.author}\n"
             f"Actor: {self.actor}\n"
-            f"By: {self.by}"
+            f"By: {self.by}\n"
+            f"ISBN: {self.isbn}"
         )
 
     def __repr__(self) -> str:

@@ -3,6 +3,7 @@ pypdf is the original.
 PyPDF2 is a very good fork that was recently merged back into pypdf.
 PyPDF3 and PyPDF4 are both bad forks. TLDR; use pypdf.
 """
+
 from pathlib import Path
 from typing import List
 

@@ -17,6 +17,7 @@ using response.content
 using response.raw.read()  -> stream=True is required
 """
 
+
 # Using .content (simplest/official) (see Zhenyi Zhang's answer):
 def todo_refactor():
     r = requests.get("http://lorempixel.com/400/200")

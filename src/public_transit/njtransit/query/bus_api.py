@@ -1,6 +1,7 @@
 """
 projecte parked due to anti-robot mechanism on njtransit.com
 """
+
 import re
 from typing import List
 

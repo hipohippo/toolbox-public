@@ -49,7 +49,10 @@ def query_all_stations_for_route(route: str, stop_info_df: pd.DataFrame) -> pd.D
 def _query_feed(route: RouteGroup, api_key: str) -> dict:
     resp = requests.get(
         f"https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs{route.value}",
-        headers={"x-api-key": api_key, "key": api_key,},
+        headers={
+            "x-api-key": api_key,
+            "key": api_key,
+        },
         # params={"hour": "10", "minute": "25"},
     )
     feed = gtfs_realtime_pb2.FeedMessage()

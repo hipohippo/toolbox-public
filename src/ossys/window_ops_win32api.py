@@ -1,6 +1,8 @@
 import ctypes
+
 user32 = ctypes.windll.user32
 from ctypes import wintypes
+
 # Define the necessary constants and types
 GWL_STYLE = -16
 GW_CHILD = 5
@@ -15,9 +17,7 @@ WM_GETTEXTLENGTH = 0x000E
 HWND = ctypes.wintypes.HWND
 LPARAM = ctypes.wintypes.LPARAM
 
-WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL,
-                                 wintypes.HWND,
-                                 wintypes.LPARAM)
+WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
 
 # Retrieve the handle of the target window
 window_title = "chrome"
@@ -43,32 +43,27 @@ text = buffer.value
 
 def enum_windows_callback(hwnd, lParam):
     # window_title = ctypes.create_unicode_buffer(1024)
-    #ctypes.windll.user32.GetWindowTextW(hwnd, window_title, ctypes.sizeof(window_title))
+    # ctypes.windll.user32.GetWindowTextW(hwnd, window_title, ctypes.sizeof(window_title))
     pid = ctypes.windll.user32.GetWindowThreadProcessId(hwnd, 0)
     print(pid)
     return True
 
-WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL,
-                                 wintypes.HWND,
-                                 wintypes.LPARAM)
+
+WNDENUMPROC = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
 user32 = ctypes.windll.user32
-user32.EnumWindows.argtypes = [
-    WNDENUMPROC,
-    wintypes.LPARAM]
-user32.GetWindowTextLengthW.argtypes = [
-    wintypes.HWND]
-user32.GetWindowTextW.argtypes = [
-    wintypes.HWND,
-    wintypes.LPWSTR,
-    ctypes.c_int]
+user32.EnumWindows.argtypes = [WNDENUMPROC, wintypes.LPARAM]
+user32.GetWindowTextLengthW.argtypes = [wintypes.HWND]
+user32.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+
 
 def worker(hwnd, lParam):
     length = user32.GetWindowTextLengthW(hwnd) + 1
     buffer = ctypes.create_unicode_buffer(length)
     user32.GetWindowTextW(hwnd, buffer, length)
-    if repr(buffer.value).lower().find("deepl")>=0:
+    if repr(buffer.value).lower().find("deepl") >= 0:
         print(hwnd, repr(buffer.value))
     return True
+
 
 cb_worker = WNDENUMPROC(worker)
 if not user32.EnumWindows(cb_worker, 42):

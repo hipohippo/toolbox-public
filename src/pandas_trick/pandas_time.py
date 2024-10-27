@@ -13,4 +13,4 @@ pd.date_range("2021-01-01", "2021-01-02", periods=25)  ## 25 sample points
 
 
 pd.Timestamp.now().normalize()
-pd.Timedelta("3 min").components.minutes #?
+pd.Timedelta("3 min").components.minutes  # ?

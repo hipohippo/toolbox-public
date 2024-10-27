@@ -62,7 +62,7 @@ class TrainStatus:
 
 
 def get_train_status(path_station: PathStation):
-    return requests.get(fr"https://path.api.razza.dev/v1/stations/{path_station.api_name}/realtime").json()
+    return requests.get(rf"https://path.api.razza.dev/v1/stations/{path_station.api_name}/realtime").json()
 
 
 def html_format_path_status_output(current_station: PathStation, status_json: dict) -> str:
