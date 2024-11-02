@@ -12,7 +12,7 @@ from pypdf import PdfReader, PdfWriter
 
 def split_pdf():
     with open("input.pdf", "rb") as infile:
-        infile = open(rf"input.pdf", "rb")
+        infile = open(r"input.pdf", "rb")
         reader = PdfReader(infile)
 
     for idx, page in enumerate(reader.pages):

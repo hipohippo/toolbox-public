@@ -1,6 +1,5 @@
 from mastodon import Mastodon
 from configparser import ConfigParser
-from pathlib import Path
 
 this_config = ConfigParser()
 this_config.read("config.ini")

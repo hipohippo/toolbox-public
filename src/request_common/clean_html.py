@@ -1,7 +1,4 @@
-import json
 import re
-import sys
-from lxml import html
 from lxml.html.clean import Cleaner
 
 allowed_tags = (
