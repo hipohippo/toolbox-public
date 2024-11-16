@@ -3,6 +3,8 @@ from enum import Enum
 
 from neodb.item import NeoDBItem
 
+from typing import Optional
+
 
 class ShelfType(Enum):
     WISHLIST = "wishlist"
@@ -41,23 +43,34 @@ class NeoDB:
             "accept": "application/json",
         }
 
-    def mark_complete(self, item_uuid: str, comment_text: str) -> tuple[int, dict]:
+    def mark_complete(
+        self,
+        item_uuid: str,
+        comment_text: str,
+        visibility: Visibility,
+        rating_grade: Optional[int],
+    ) -> tuple[int, dict]:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
         fields = {
             FieldName.SHELF_TYPE.value: ShelfType.COMPLETE.value,
-            FieldName.VISIBILITY.value: Visibility.SELF.value,
+            FieldName.VISIBILITY.value: visibility.value,
             FieldName.COMMENT_TEXT.value: comment_text,
             FieldName.TAGS.value: [],
             FieldName.SHARE_TO_MASTODON.value: False,
         }
+        fields.update(
+            {FieldName.RATING_GRADE.value: rating_grade}
+        ) if rating_grade else None
         response = requests.post(endpoint, headers=self.headers, json=fields)
         return response.status_code, response.json()
 
-    def mark_wish(self, item_uuid: str, comment_text: str) -> tuple[int, dict]:
+    def mark_wish(
+        self, item_uuid: str, comment_text: str, visibility: Visibility
+    ) -> tuple[int, dict]:
         endpoint = f"{self.base_url}/me/shelf/item/{item_uuid}"
         fields = {
             FieldName.SHELF_TYPE.value: ShelfType.WISHLIST.value,
-            FieldName.VISIBILITY.value: Visibility.SELF.value,
+            FieldName.VISIBILITY.value: visibility.value,
             FieldName.COMMENT_TEXT.value: comment_text,
             FieldName.TAGS.value: [],
             FieldName.SHARE_TO_MASTODON.value: False,

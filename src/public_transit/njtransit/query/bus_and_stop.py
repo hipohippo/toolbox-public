@@ -2,7 +2,7 @@ import re
 from enum import Enum
 import pandas as pd
 import logging
-BUS_NUMBERS = ["156R", "159R", "158"]
+BUS_NUMBERS = ["156", "159", "158"]
 
 
 class NJTBusStop(Enum):
@@ -35,14 +35,14 @@ class NextBus:
         predicted_departure = re.match(r"[^\d]*([\d]+)[ ]*MIN", predicted_departure_str)
         if predicted_departure:
             self.predicted_departure_min = int(predicted_departure.group(1))
-            self.predicted_departure_str = str(predicted_departure_str)
+            self.predicted_departure_str = f"{self.predicted_departure_min} MIN"
             self.departure_time = pd.Timestamp.now() + pd.Timedelta(f"{self.predicted_departure_min} min")
             self.departure_time_str = self.departure_time.strftime("%I:%M %p")
         else:
             self.predicted_departure_min = None
             self.predicted_departure_str = "DELAYED"
-            self.departure_time = None
-            self.departure_time_str = ""
+            self.departure_time = pd.Timestamp.now() + pd.Timedelta(hours=4)
+            self.departure_time_str = "____"
 
         grps = re.search(r".*(\(Passengers: \w\)).+", vehicle_info)
         if grps:
@@ -54,13 +54,14 @@ class NextBus:
             if self.departure_time.time() > pd.Timestamp("2024-01-01 22:00:00").time():
                 self.gate = " Gate 301"
             else:
-                self.gate = {"158": " Gate 202", "159R": "Gate 201-2", "156R": "Gate 201-3"}[self.bus_number]
+                self.gate = {"158": " Gate 202", "159": " Gate 201-2", "156": "Gate 201-3"}[self.bus_number[1:]]
         else:
             self.gate = ""
 
     def to_html(self) -> str:
         logging.info(
             f"{self.bus_number}{self.gate}: in <b>{self.predicted_departure_str}</b> @ <b>{self.departure_time_str} "
+            f"{self.passengers_info}</b>"
         )
         return (
             f"{self.bus_number}{self.gate}: in <b>{self.predicted_departure_str}</b> @ <b>{self.departure_time_str} "

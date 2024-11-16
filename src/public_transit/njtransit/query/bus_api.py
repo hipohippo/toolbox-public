@@ -45,5 +45,7 @@ async def next_bus_job(stop: NJTBusStop, direction: str, browser: Browser) -> st
     for busno in BUS_NUMBERS:
         page_content: BeautifulSoup = await extract_content_from_page(stop, busno, browser)
         bus_arrivals.extend(parse_content_from_page(stop, page_content))
+    
+    bus_arrivals.sort(key=lambda x: x.departure_time)
     message = format_bus_message(stop, bus_arrivals, direction)
     return message
