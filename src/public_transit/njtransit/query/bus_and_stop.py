@@ -1,7 +1,9 @@
+import logging
 import re
 from enum import Enum
+
 import pandas as pd
-import logging
+
 BUS_NUMBERS = ["156", "159", "158"]
 
 
@@ -24,7 +26,13 @@ class NJTBusStop(Enum):
 
 
 class NextBus:
-    def __init__(self, stop_id: NJTBusStop, bus_number: str, predicted_departure_str: str, vehicle_info: str):
+    def __init__(
+        self,
+        stop_id: NJTBusStop,
+        bus_number: str,
+        predicted_departure_str: str,
+        vehicle_info: str,
+    ):
         """
         :param stop:
         :param predicted_time:  must match the regex {[\d]+ MIN"
@@ -36,7 +44,9 @@ class NextBus:
         if predicted_departure:
             self.predicted_departure_min = int(predicted_departure.group(1))
             self.predicted_departure_str = f"{self.predicted_departure_min} MIN"
-            self.departure_time = pd.Timestamp.now() + pd.Timedelta(f"{self.predicted_departure_min} min")
+            self.departure_time = pd.Timestamp.now() + pd.Timedelta(
+                f"{self.predicted_departure_min} min"
+            )
             self.departure_time_str = self.departure_time.strftime("%I:%M %p")
         else:
             self.predicted_departure_min = None
@@ -54,7 +64,11 @@ class NextBus:
             if self.departure_time.time() > pd.Timestamp("2024-01-01 22:00:00").time():
                 self.gate = " Gate 301"
             else:
-                self.gate = {"158": " Gate 202", "159": " Gate 201-2", "156": "Gate 201-3"}[self.bus_number[1:]]
+                self.gate = {
+                    "158": " Gate 202",
+                    "159": " Gate 201-2",
+                    "156": " Gate 201-3",
+                }[self.bus_number[1:]]
         else:
             self.gate = ""
 
