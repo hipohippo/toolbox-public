@@ -12,7 +12,9 @@ def get_ny_time(epoch_time: int):
     )
 
 
-def filter_by_time(stop_arrivals: List[Tuple[str, pd.Timestamp]], minute_departure_cap: int):
+def filter_by_time(
+    stop_arrivals: List[Tuple[str, pd.Timestamp]], minute_departure_cap: int
+):
     return [
         (route, tm)
         for route, tm in stop_arrivals

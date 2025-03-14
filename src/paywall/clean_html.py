@@ -28,18 +28,33 @@ allowed_tags = (
     "ul",
     "video",
 )
-allowed_top_level_tags = ("aside", "blockquote", "pre", "figure", "h3", "h4", "hr", "ol", "p", "ul")
+allowed_top_level_tags = (
+    "aside",
+    "blockquote",
+    "pre",
+    "figure",
+    "h3",
+    "h4",
+    "hr",
+    "ol",
+    "p",
+    "ul",
+)
 
 elements_with_text = ("a", "aside", "b", "blockquote", "em", "h3", "h4", "p", "strong")
 
 youtube_re = re.compile(r"(https?:)?//(www\.)?youtube(-nocookie)?\.com/embed/")
 vimeo_re = re.compile(r"(https?:)?//player\.vimeo\.com/video/(\d+)")
-twitter_re = re.compile(r"(https?:)?//(www\.)?twitter\.com/[A-Za-z0-9_]{1,15}/status/\d+")
+twitter_re = re.compile(
+    r"(https?:)?//(www\.)?twitter\.com/[A-Za-z0-9_]{1,15}/status/\d+"
+)
 telegram_embed_iframe_re = re.compile(
-    r"^(https?)://(t\.me|telegram\.me|telegram\.dog)/([a-zA-Z0-9_]+)/(\d+)", re.IGNORECASE
+    r"^(https?)://(t\.me|telegram\.me|telegram\.dog)/([a-zA-Z0-9_]+)/(\d+)",
+    re.IGNORECASE,
 )
 telegram_embed_script_re = re.compile(
-    r"""<script(?=[^>]+\sdata-telegram-post=['"]([^'"]+))[^<]+</script>""", re.IGNORECASE
+    r"""<script(?=[^>]+\sdata-telegram-post=['"]([^'"]+))[^<]+</script>""",
+    re.IGNORECASE,
 )
 pre_content_re = re.compile(r"<(pre|code)(>|\s[^>]*>)[\s\S]*?</\1>")
 line_breaks_inside_pre = re.compile(r"<br(/?>|\s[^<>]*>)")
@@ -48,13 +63,16 @@ header_re = re.compile(r"<head[^a-z][\s\S]*</head>")
 
 
 def clean_article_html(html_string):
-
     html_string = html_string.replace("<h1", "<h3").replace("</h1>", "</h3>")
     # telegram will convert <b> anyway
     html_string = re.sub(r"<(/?)b(?=\s|>)", r"<\1strong", html_string)
     html_string = re.sub(r"<(/?)(h2|h5|h6)", r"<\1h4", html_string)
     # convert telegram embed posts before cleaner
-    html_string = re.sub(telegram_embed_script_re, r'<iframe src="https://t.me/\1"></iframe>', html_string)
+    html_string = re.sub(
+        telegram_embed_script_re,
+        r'<iframe src="https://t.me/\1"></iframe>',
+        html_string,
+    )
     # remove <head> if present (can't do this with Cleaner)
     html_string = header_re.sub("", html_string)
 
@@ -87,7 +105,7 @@ def replace_line_breaks_except_pre(html_string, replace_by=" "):
     out = ""
 
     # replace non-breaking space with usual space
-    html_string = html_string.replace("\u00A0", " ")
+    html_string = html_string.replace("\u00a0", " ")
 
     # get <pre> start/end postion
     for x in pre_content_re.finditer(html_string):

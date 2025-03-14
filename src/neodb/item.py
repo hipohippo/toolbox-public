@@ -23,7 +23,9 @@ class NeoDBItem:
         self.parent_uuid: str = raw_data.get("parent_uuid", "")
         self.external_resources: list[dict] = raw_data.get("external_resources", [])
         self.type = raw_data.get("type", "")  # TVSeason, Edition, Album
-        self.category: str = raw_data.get("category", "")  # tv, book, movie, music, podcast
+        self.category: str = raw_data.get(
+            "category", ""
+        )  # tv, book, movie, music, podcast
         self.title: str = raw_data.get("title", "")
         self.display_title: str = raw_data.get("display_title", "")
         self.description: str = raw_data.get("description", "")

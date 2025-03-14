@@ -6,7 +6,9 @@ import requests
 from nationalpark.lodge_short_name import NationalPark, SHORT_NAME
 
 
-def scrape_national_park_vacancy(national_park: NationalPark, dt: pd.Timestamp, nights: int):
+def scrape_national_park_vacancy(
+    national_park: NationalPark, dt: pd.Timestamp, nights: int
+):
     lodge_raw = requests.get(
         rf"https://webapi.xanterra.net/v1/api/availability/hotels/{national_park.value}?"
         rf"date={dt.month}%2F{dt.day}%2F{dt.year}&limit=1&is_group=false&nights={nights}"
@@ -26,4 +28,6 @@ def scrape_national_park_vacancy(national_park: NationalPark, dt: pd.Timestamp, 
 
 
 if __name__ == "__main__":
-    scrape_national_park_vacancy(NationalPark.GRAND_CANYON, pd.Timestamp("2024-08-14"), 1)
+    scrape_national_park_vacancy(
+        NationalPark.GRAND_CANYON, pd.Timestamp("2024-08-14"), 1
+    )

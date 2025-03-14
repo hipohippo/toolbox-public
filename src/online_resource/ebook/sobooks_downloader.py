@@ -17,7 +17,9 @@ def get_page_url(bookid: int) -> str:
 
 def get_download_url(bookid: int) -> Tuple[str, str, str]:
     bookpage = requests.get(get_page_url(bookid))
-    time_search = re.search(r".*时间：</strong>(\d{4})-(\d{2})-(\d{2}).*", bookpage.text)
+    time_search = re.search(
+        r".*时间：</strong>(\d{4})-(\d{2})-(\d{2}).*", bookpage.text
+    )
     isbn = re.search(r".*ISBN：</strong>(\d{13}).*", bookpage.text)[1]
     year = time_search[1]
     month = time_search[2]

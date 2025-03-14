@@ -18,7 +18,7 @@ def split_pdf():
     for idx, page in enumerate(reader.pages):
         writer = PdfWriter()
         writer.add_page(reader.pages[idx])
-        with open(rf"{idx+1}.pdf", "wb") as f:
+        with open(rf"{idx + 1}.pdf", "wb") as f:
             writer.write(f)
 
 

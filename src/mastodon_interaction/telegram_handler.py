@@ -40,7 +40,9 @@ async def post_to_mastodon(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     except Exception as e:
         logging.error(f"Error posting to Mastodon: {str(e)}")
-        await update.message.reply_text("Failed to post to Mastodon. Please try again later.")
+        await update.message.reply_text(
+            "Failed to post to Mastodon. Please try again later."
+        )
     finally:
         # Clean up downloaded photos
         for photo in photos:

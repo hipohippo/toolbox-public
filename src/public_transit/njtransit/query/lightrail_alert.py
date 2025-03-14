@@ -11,7 +11,9 @@ def get_hblr_alert_link(xml_content: Union[str, bytearray]):
     travel_advisory_item = root[0].findall("item")
 
     hblr_alert = [
-        item for item in travel_advisory_item if item.find("description").text.find("Hudson-Bergen Light Rail") >= 0
+        item
+        for item in travel_advisory_item
+        if item.find("description").text.find("Hudson-Bergen Light Rail") >= 0
     ]
     if len(hblr_alert) > 0:
         hblr_alert_content_link = hblr_alert[0].find("link").text

@@ -21,7 +21,10 @@ class RouteGroup(Enum):
 
 route_stop_group = {"ACE", "BDFM", "NQRW", "GHJLSZ", "123", "456", "7"}
 route_stop_map = dict()
-[route_stop_map.update({route: route_group for route in route_group}) for route_group in route_stop_group]
+[
+    route_stop_map.update({route: route_group for route in route_group})
+    for route_group in route_stop_group
+]
 
 
 def query_stop_and_route(
@@ -40,9 +43,13 @@ def query_stop_and_route(
     return station_time
 
 
-def query_all_stations_for_route(route: str, stop_info_df: pd.DataFrame) -> pd.DataFrame:
+def query_all_stations_for_route(
+    route: str, stop_info_df: pd.DataFrame
+) -> pd.DataFrame:
     route_stop_group = list(route_stop_map.get(route, []))
-    stops = stop_info_df[stop_info_df["route"].isin(route_stop_group)][["stop_name", "stop_id"]]
+    stops = stop_info_df[stop_info_df["route"].isin(route_stop_group)][
+        ["stop_name", "stop_id"]
+    ]
     return stops
 
 
@@ -64,13 +71,19 @@ def _query_feed(route: RouteGroup, api_key: str) -> dict:
 def _parse_stop_time(train_feed: dict, stop_id: str) -> List[Tuple[str, pd.Timestamp]]:
     train_at_station = []
     for train in train_feed:  # trains are dictionaries
-        train_schedule = train.get("trip_update", {})  # train_schedule is a dictionary with trip and stop_time_update
+        train_schedule = train.get(
+            "trip_update", {}
+        )  # train_schedule is a dictionary with trip and stop_time_update
         train_route = train_schedule.get("trip", {}).get("route_id", None)
         # train_direction = train_schedule.get("trip", {}).get("direction", None)
         if train_route is None:
             continue
-        arrivals = train_schedule.get("stop_time_update", [])  # arrival_times is a list of arrivals
-        for scheduled_arrival in arrivals:  # arrivals are dictionaries with time data and stop_ids
+        arrivals = train_schedule.get(
+            "stop_time_update", []
+        )  # arrival_times is a list of arrivals
+        for (
+            scheduled_arrival
+        ) in arrivals:  # arrivals are dictionaries with time data and stop_ids
             if scheduled_arrival.get("stop_id", None) == stop_id:
                 arrival_time = scheduled_arrival.get("arrival", {}).get("time", None)
                 if arrival_time and arrival_time > int(pd.Timestamp.now().timestamp()):

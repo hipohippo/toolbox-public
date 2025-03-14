@@ -103,7 +103,10 @@ class Weibo(Preview):
         soup = status.get_content()
         if text_length(soup.text) <= 4800:
             if status.pic_ids:
-                media = [InputMediaPhoto(f"{IMG_HOST_URL}{pic_id}.jpg") for pic_id in status.pic_ids]
+                media = [
+                    InputMediaPhoto(f"{IMG_HOST_URL}{pic_id}.jpg")
+                    for pic_id in status.pic_ids
+                ]
                 return (MSG_TYPE.DIRECT_PHOTOS, (media, html_string))
             elif status.has_video():  # TODO: only handle video of length <= 120
                 video_url = status.get_video()
@@ -115,7 +118,9 @@ class Weibo(Preview):
         return (MSG_TYPE.TELEGRAGH_ARTICLES, (title, author, content))
 
 
-WEIBO_PATTERN = re.compile(r"(\b(?:https?://)?m\.weibo\.cn/status/\S*|https://weibo.com/\d+/\S+)")
+WEIBO_PATTERN = re.compile(
+    r"(\b(?:https?://)?m\.weibo\.cn/status/\S*|https://weibo.com/\d+/\S+)"
+)
 headers = {
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57"
 }

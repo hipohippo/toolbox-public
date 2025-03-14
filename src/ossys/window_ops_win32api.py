@@ -35,7 +35,9 @@ while textbox_hwnd:
     textbox_hwnd = ctypes.windll.user32.GetWindow(textbox_hwnd, GW_HWNDNEXT)
 
 # Retrieve the text from the textbox
-text_length = ctypes.windll.user32.SendMessageW(textbox_hwnd, WM_GETTEXTLENGTH, 0, 0) + 1
+text_length = (
+    ctypes.windll.user32.SendMessageW(textbox_hwnd, WM_GETTEXTLENGTH, 0, 0) + 1
+)
 buffer = ctypes.create_unicode_buffer(text_length)
 ctypes.windll.user32.SendMessageW(textbox_hwnd, WM_GETTEXT, text_length, LPARAM(buffer))
 text = buffer.value

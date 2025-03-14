@@ -29,7 +29,9 @@ def todo_refactor():
     # Using .raw (see Martijn Pieters's answer):
     r = requests.get("http://lorempixel.com/400/200", stream=True)
     r.raise_for_status()
-    r.raw.decode_content = True  # Required to decompress gzip/deflate compressed responses.
+    r.raw.decode_content = (
+        True  # Required to decompress gzip/deflate compressed responses.
+    )
     with PIL.Image.open(r.raw) as img:
         img.show()
     r.close()  # Safety when stream=True ensure the connection is released.
