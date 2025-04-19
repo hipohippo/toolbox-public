@@ -162,6 +162,8 @@ cython_debug/
 .idea/
 
 # VSCode
-.vscode
-
-example.py
+.idea
+.vscode/
+settings.json
+local_test*.py
+example*.py
